@@ -1,54 +1,124 @@
-# Wiring and motor identification
+# Basic wiring: ESP32-C3, A4988 and three motors
 
-The table below is taken from `firmware/glados/glados.ino`. Numbers mean **GPIO numbers**, not the physical order of the pins on a header. This pinout is for the **ESP32-C3 Super Mini**.
+Use the **ESP32-C3 Super Mini** with `firmware/glados/glados.ino`. Read the pin names printed on each board: **GPIO numbers are not header positions**. The [electrical parts list](HARDWARE.md) identifies the components supplied for this build.
 
-![Signal connections from the ESP32-C3](../assets/wiring.svg)
+![Basic GLaDOS connection map](../assets/wiring-basic.svg)
 
-## Signal connections
+This connection map groups signals and power so you can wire one component at a time. It uses an **A4988 carrier**, a **12 V motor-supply example**, and an **illustrative 1/16-step setting**. Those microsteps were not established by the supplied list or code: calibrate your build before using the supplied movement limits.
 
-| ESP32-C3 GPIO | Firmware name | Connect to | Function |
+## 1. Connect the two servos
+
+| From | Connect to | Purpose |
+| --- | --- | --- |
+| C3 **GPIO 6** | Eye servo signal wire | Eye up/down: `servo1` |
+| C3 **GPIO 7** | Head roll servo signal wire | Head left/right tilt: `servo2` |
+| External servo supply **+** | Both servo positive wires, usually red | Motor power at the rated servo voltage |
+| External servo supply **− / GND** | Both servo ground wires, usually brown/black, and C3 GND | Common ground |
+
+The signal wire is usually orange, yellow or white. Confirm your connector rather than relying only on wire colours. Use the servo's specified voltage; **5–6 V is an example for compatible servos**, not a verified rating for the linked pack. Size the supply for both servos' peak current. Power the servos externally, with grounds joined to the C3.
+
+The left/right servo produces a sideways head lean (**roll**). The NEMA stepper below produces an up/down nod (**pitch**).
+
+## 2. Connect the round SPI screen
+
+| From the C3 | Connect to the display |
+| --- | --- |
+| **GPIO 5** | **CS** |
+| **GPIO 1** | **DC** |
+| **GPIO 0** | **RST / RES** |
+| **GPIO 2** | **SCL / SCK / CLK** |
+| **GPIO 4** | **SDA / DIN / MOSI** |
+| **3V3** | **VCC**, only after confirming that this breakout accepts a 3.3 V supply |
+| **GND** | **GND** |
+
+This is **SPI**: the display's SDA label means MOSI data, not an I²C connection. There is no MISO wire. If your breakout requires a different VCC supply or has a BL/backlight input, follow its own documentation; retain 3.3 V-compatible C3 signal levels. Do not assume the linked screen is identical to another GC9A01 module.
+
+## 3. Connect the A4988 driver
+
+The driver has two power inputs: **VDD** for logic and **VMOT** for motor power. Keep them separate.
+
+| A4988 pin | Connect to | Purpose |
+| --- | --- | --- |
+| **STEP** | C3 **GPIO 3** | Step pulses |
+| **DIR** | C3 **GPIO 10** | Direction |
+| **VDD** | C3 **3V3** | 3.3 V logic supply |
+| **GND**, both driver ground pins | Common **GND** | Logic and motor return |
+| **VMOT** | Motor supply **+**; 12 V DC is the example | Motor power |
+| **EN / ENABLE** | **GND** | Keeps outputs enabled; the firmware does not control EN |
+| **RESET / RST** | **3V3** | Holds reset inactive |
+| **SLEEP / SLP** | **3V3** | Keeps the driver awake |
+| **MS1**, **MS2**, **MS3** | All to **3V3** in this example | Selects 1/16 microsteps |
+| **1A + 1B** | The two wires of motor coil A | First winding |
+| **2A + 2B** | The two wires of motor coil B | Second winding |
+
+RESET and SLEEP can be bridged together and connected to 3V3. Join the motor supply negative to common GND. Keep the printed module pin names authoritative: clones can differ in orientation.
+
+**Add a capacitor across VMOT and its nearby GND.** Put its **+ lead on VMOT** and its **− lead on GND**. Use at least 47 µF; the example is **100 µF / 25 V for 12 V**, close to the driver.
+
+### Identify the two motor wire pairs
+
+With everything unpowered, use a multimeter's resistance/continuity function. Two wires from the same winding show a low resistance; wires from different windings do not form a pair. Connect one complete pair to 1A/1B, and the other pair to 2A/2B. Check the motor datasheet if it has more than four wires. Wire colours alone do not identify the pairs.
+
+### Select microsteps before calibration
+
+| MS1 | MS2 | MS3 | Setting |
 | --- | --- | --- | --- |
-| **6** | `PIN_SERVO_1` | Eye servo signal | Eye tilts up/down |
-| **7** | `PIN_SERVO_2` | Head roll servo signal | Head tilts left/right |
-| **3** | `PIN_STEP` | Stepper driver STEP | Head pitch step pulses |
-| **10** | `PIN_DIR` | Stepper driver DIR | Head pitch direction |
-| **5** | `TFT_CS` | Display CS | SPI chip select |
-| **1** | `TFT_DC` | Display DC | Data/command |
-| **0** | `TFT_RST` | Display RST / RES | Display reset |
-| **2** | `TFT_SCLK` | Display SCL / SCK | SPI clock |
-| **4** | `TFT_MOSI` | Display SDA / DIN / MOSI | SPI data from C3 |
-| **9** | `PIN_LED` | Compatible active-low LED circuit | LED effect; shared with the BOOT function |
-| **GND** | — | All signal grounds | Common reference |
-| **USB** | `Serial` | PC USB data port | 115200-baud command link |
+| GND | GND | GND | Full step |
+| 3V3 | GND | GND | 1/2 step |
+| GND | 3V3 | GND | 1/4 step |
+| 3V3 | 3V3 | GND | 1/8 step |
+| 3V3 | 3V3 | 3V3 | **1/16 step: the diagram's example** |
 
-On this SPI display, a label such as **SDA** means the serial data input connected to MOSI; this firmware does not use I²C. There is no MISO connection. If your module has a backlight pin, connect it according to that module's specification: the firmware has no dedicated backlight GPIO.
+These are hardware settings. Keep an already calibrated build's setting. Changing it changes the distance moved per STEP pulse and requires recalibrating `NEMA_MIN_POS`, `NEMA_MAX_POS`, `NEMA_CENTER_POSITION`, startup travel and animation targets. The example does not prove that the supplied targets suit your mechanism.
 
-## Power connections
+### Set the driver current limit
 
-Servos and the NEMA motor need appropriately rated external supplies. Do not power the motors from a C3 GPIO or its 3.3 V regulator. Match servo supply voltage to the servo's datasheet, and match the driver supply and current limit to the stepper and driver.
+Before motor testing, establish the motor's rated phase current and your carrier's sense-resistor value. For the A4988:
 
-Join the C3 ground, servo supply ground and driver signal ground. The signal diagram shows the control wires; it is not a supply-voltage prescription for every possible driver or display board.
+```text
+VREF = 8 × I_LIMIT × R_SENSE
+```
 
-The firmware does **not** drive the stepper driver's EN pin. Set EN, RESET and SLEEP, if present, according to the specific driver datasheet. For an active-low EN input that needs to stay enabled, its documented low level is typically used; verify your actual driver rather than assuming every module has the same enable circuit.
+Use volts, amperes and ohms. Choose a limit within both the motor rating and your module's cooling capability. Measure VREF against driver GND and use the module's adjustment procedure. There is no universal potentiometer position or VREF for all clones. The current at the power supply is not the winding current.
 
-Driver MS/microstep pins are also configured by the wiring. Changing them changes the physical movement produced by a given `NEMA_*` value, so the stepper must be recalibrated afterwards.
+## 4. Connect the red LED
 
-For the display, check the supply voltage allowed by the actual breakout. All C3 GPIO signals are 3.3 V logic. The uploaded package does not identify the exact driver or display breakout power circuitry, so a universal power-connector diagram would be misleading.
+The existing firmware uses **GPIO 9, active LOW**. Wire the circuit in this order:
 
-## The three axes in plain language
+| Connection | Wire to |
+| --- | --- |
+| C3 **3V3** | One end of a **330 Ω resistor** |
+| Other resistor end | LED **anode (+)** |
+| LED **cathode (−)** | C3 **GPIO 9** |
 
-- **Eye servo, GPIO 6:** moves the eye itself up and down.
-- **Head roll servo, GPIO 7:** leans the whole head left and right. This is roll, not a horizontal pan.
-- **Head pitch stepper, GPIO 3/10:** nods the whole head up and down through the transmission.
+For a typical through-hole LED, the long lead is the anode and the flat side/short lead marks the cathode. LOW lights the LED; HIGH turns it off. Use a bare red indicator LED compatible with this circuit, not an unknown powered LED module.
 
-The screen's animated eye is a separate visual effect; `eyeTimeMs` in an animation affects the display, not the eye servo's travel setting.
+GPIO 9 is also **BOOT**. The LED circuit must not hold it low during normal startup. GPIO 2, used for display clock, is also a C3 boot strapping pin; attached circuitry must preserve the board's startup levels. Some Super Mini boards have an onboard GPIO 8 LED; that is separate from this GPIO 9 output.
 
-## LED polarity and C3 boot pins
+## 5. Join the grounds, keep power rails separate
 
-The supplied LED logic is **active low**: HIGH is off, LOW is on. For a compatible external indicator, use a suitable current-limited circuit with that polarity. Super Mini boards may also have an onboard LED on GPIO 8; that LED is not the GPIO 9 output used by this firmware.
+| Supply or component | Connection |
+| --- | --- |
+| PC USB data cable | C3 USB connector: board power and serial data |
+| C3 GND | Common ground junction |
+| Servo supply negative and both servo ground wires | Common ground junction |
+| Motor supply negative and both A4988 GND pins | Common ground junction |
+| Display GND | Common ground junction |
 
-GPIO 2 and GPIO 9 are C3 strapping pins. Connected circuitry must allow the board to reach the correct startup levels. GPIO 9 must not be held low by the LED circuit during normal boot.
+**Common GND is the shared electrical reference.** Use suitable power wiring and a distribution junction for motor return currents, with a ground connection to the C3. The servo and motor supplies' positive outputs remain separate. Do not feed 12 V to the C3, display, LED or servos. Do not power either motor type from a GPIO or the C3 3V3 regulator. For this USB-powered arrangement, do not also wire an external positive supply into the C3 5V pin.
 
-## Driver-specific details to confirm
+## 6. First power-up
 
-Before translating the signal diagram into a full power-wiring diagram, identify the driver model, its EN/RESET/SLEEP requirements, its configured microsteps, the stepper winding pairs, supply ratings and the display breakout's voltage support. The software does not contain these physical component specifications.
+1. Disconnect all supplies before wiring. Confirm polarity and winding pairs.
+2. Before flashing an uncalibrated build, set `NEMA_BOOT_TRAVEL_STEPS = 0` and `CALIBRATION_ON_BOOT = true`. Flash with external motor supplies off.
+3. Test the C3/display by USB first. A servo still receives its initial angle when powered: fit horns/linkages using the [calibration procedure](CALIBRATION.md).
+4. Set the A4988 current limit, then power and test each axis in small increments from a known reference pose.
+5. Finish travel calibration before enabling automatic animations or startup travel. Never connect or disconnect motor wires while the driver is powered.
+
+## Reference documents
+
+- [Allegro A4988 datasheet](https://www.pololu.com/file/0J450/A4988.pdf): logic, current-limit equation and microstep states.
+- [Pololu A4988 carrier guide](https://www.pololu.com/product/1182): carrier wiring, supply separation and VMOT capacitor. Use it as a carrier reference, then confirm your actual module.
+- [Espressif C3 strapping-pin explanation](https://espressif.github.io/esp32-c3-book-en/chapter_5/5.2/5.2.6.html): boot-time pin levels.
+
+The GPIO mapping comes from the project's firmware. This diagram has been checked against that mapping and the A4988 references; the assembled hardware has not been electrically or mechanically tested here.

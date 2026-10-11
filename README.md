@@ -41,6 +41,8 @@ The PC runs the speech and AI software. The ESP32-C3 runs the motors and eye dis
 
 **Before powering an assembled mechanism, read the calibration guide.** The stepper has no reference sensor: its boot movement assumes a known physical starting pose. For first calibration, disable the automatic boot travel and start the firmware in calibration mode, as explained in the guide.
 
+[Electrical shopping list](docs/HARDWARE.md) · [Basic connection table and schematic](docs/WIRING.md)
+
 ## Which motor is which?
 
 | Physical movement | Firmware motor | GPIO | Travel settings |

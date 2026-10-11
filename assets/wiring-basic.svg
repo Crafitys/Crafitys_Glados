@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1570" viewBox="0 0 1500 1570" role="img" aria-labelledby="title desc">
+<title id="title">Crafitys GLaDOS basic ESP32-C3 and A4988 wiring</title><desc id="desc">Connection map for two servos, SPI display, A4988 driver, NEMA 17, active-low LED, external power and common ground. The example uses one-sixteenth microsteps and requires motor travel calibration.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#2e6ca6"/></marker></defs>
+<style>text{font-family:DejaVu Sans,Arial,sans-serif}</style><rect width="1500" height="1570" fill="#f1f5f9"/>
+<text x="60" y="64" font-size="40" font-weight="700" fill="#20334c">CRAFITYS GLaDOS</text>
+<text x="60" y="107" font-size="28" font-weight="400" fill="#20334c">Basic wiring • ESP32-C3 Super Mini + A4988</text>
+<text x="60" y="143" font-size="21" font-weight="400" fill="#53647a">Read the printed pin names. This is a connection map, not a physical pin layout.</text>
+<rect x="60" y="178" width="660" height="225" rx="16" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="85" y="220" font-size="27" font-weight="700" fill="#20334c">1  SERVOS — control signals</text>
+<text x="85" y="274" font-size="23" font-weight="700" fill="#20334c">C3 GPIO 6</text>
+<path d="M255 267 L325 267" stroke="#2e6ca6" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<text x="340" y="274" font-size="23" font-weight="400" fill="#20334c">Eye servo SIGNAL</text>
+<text x="85" y="327" font-size="23" font-weight="700" fill="#20334c">C3 GPIO 7</text>
+<path d="M255 320 L325 320" stroke="#2e6ca6" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<text x="340" y="327" font-size="23" font-weight="400" fill="#20334c">Head roll servo SIGNAL</text>
+<text x="85" y="377" font-size="20" font-weight="400" fill="#53647a">Servo red (+) and black/brown (−): see power below.</text>
+<rect x="760" y="178" width="680" height="360" rx="16" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="785" y="220" font-size="27" font-weight="700" fill="#20334c">2  ROUND SCREEN — GC9A01 / SPI</text>
+<text x="785" y="268" font-size="23" font-weight="700" fill="#20334c">C3 GPIO 5</text>
+<path d="M955 261 L1025 261" stroke="#2e6ca6" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<text x="1040" y="268" font-size="23" font-weight="400" fill="#20334c">CS</text>
+<text x="785" y="312" font-size="23" font-weight="700" fill="#20334c">C3 GPIO 1</text>
+<path d="M955 305 L1025 305" stroke="#2e6ca6" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<text x="1040" y="312" font-size="23" font-weight="400" fill="#20334c">DC</text>
+<text x="785" y="356" font-size="23" font-weight="700" fill="#20334c">C3 GPIO 0</text>
+<path d="M955 349 L1025 349" stroke="#2e6ca6" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<text x="1040" y="356" font-size="23" font-weight="400" fill="#20334c">RST / RES</text>
+<text x="785" y="400" font-size="23" font-weight="700" fill="#20334c">C3 GPIO 2</text>
+<path d="M955 393 L1025 393" stroke="#2e6ca6" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<text x="1040" y="400" font-size="23" font-weight="400" fill="#20334c">SCL / SCK</text>
+<text x="785" y="444" font-size="23" font-weight="700" fill="#20334c">C3 GPIO 4</text>
+<path d="M955 437 L1025 437" stroke="#2e6ca6" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<text x="1040" y="444" font-size="23" font-weight="400" fill="#20334c">SDA / DIN / MOSI</text>
+<text x="785" y="498" font-size="20" font-weight="400" fill="#53647a">VCC → C3 3V3 only if the module accepts 3.3 V.</text>
+<rect x="60" y="435" width="660" height="442" rx="16" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="85" y="477" font-size="27" font-weight="700" fill="#20334c">3  A4988 → NEMA 17 — head pitch</text>
+<text x="85" y="531" font-size="23" font-weight="700" fill="#20334c">C3 GPIO 3</text>
+<path d="M255 524 L325 524" stroke="#2e6ca6" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<text x="340" y="531" font-size="23" font-weight="400" fill="#20334c">A4988 STEP</text>
+<text x="85" y="584" font-size="23" font-weight="700" fill="#20334c">C3 GPIO 10</text>
+<path d="M255 577 L325 577" stroke="#2e6ca6" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<text x="340" y="584" font-size="23" font-weight="400" fill="#20334c">A4988 DIR</text>
+<text x="85" y="632" font-size="23" font-weight="700" fill="#20334c">A4988 outputs</text>
+<path d="M288 625 L362 625" stroke="#2e6ca6" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<text x="380" y="632" font-size="23" font-weight="700" fill="#20334c">NEMA 17 windings</text>
+<text x="85" y="690" font-size="23" font-weight="700" fill="#20334c">1A + 1B</text>
+<path d="M255 683 L325 683" stroke="#2e6ca6" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<text x="340" y="690" font-size="23" font-weight="400" fill="#20334c">Coil A: one matched pair</text>
+<text x="85" y="743" font-size="23" font-weight="700" fill="#20334c">2A + 2B</text>
+<path d="M255 736 L325 736" stroke="#2e6ca6" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<text x="340" y="743" font-size="23" font-weight="400" fill="#20334c">Coil B: the other pair</text>
+<text x="85" y="798" font-size="20" font-weight="400" fill="#53647a">Identify both pairs with a multimeter, power OFF.</text>
+<text x="85" y="842" font-size="20" font-weight="700" fill="#20334c">Motor wires go to the driver, never to C3 GPIOs.</text>
+<rect x="760" y="574" width="680" height="303" rx="16" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="785" y="616" font-size="27" font-weight="700" fill="#20334c">4  RED LED — active LOW</text>
+<g transform="translate(0,25)">
+<text x="785" y="657" font-size="23" font-weight="700" fill="#20334c">3V3</text>
+<path d="M865 650 L910 650" stroke="#2e6ca6" stroke-width="4" fill="none"/>
+<rect x="910" y="637" width="98" height="26" fill="#fff3d9" stroke="#bd7a18" stroke-width="3"/>
+<text x="916" y="619" font-size="22" font-weight="700" fill="#20334c">330 Ω</text>
+<path d="M1008 650 L1070 650" stroke="#2e6ca6" stroke-width="4" fill="none"/>
+<path d="M1070 626 L1108 650 L1070 674 Z M1110 626 V674" fill="#ffe8e8" stroke="#c74646" stroke-width="3"/>
+<path d="M1112 650 L1186 650" stroke="#2e6ca6" stroke-width="4" fill="none"/>
+<text x="1200" y="657" font-size="23" font-weight="700" fill="#20334c">GPIO 9</text>
+<text x="1039" y="713" font-size="20" font-weight="400" fill="#20334c">Anode (+)</text>
+<text x="1180" y="713" font-size="20" font-weight="400" fill="#20334c">Cathode (−)</text>
+</g>
+<text x="785" y="767" font-size="20" font-weight="400" fill="#53647a">LOW = on. Do not connect the LED to 5 V or 12 V.</text>
+<text x="785" y="811" font-size="20" font-weight="400" fill="#53647a">GPIO 9 is also BOOT; do not hold it at GND.</text>
+<text x="785" y="850" font-size="20" font-weight="400" fill="#53647a">Usual LED: long leg (+), flat side / short leg (−).</text>
+<rect x="60" y="911" width="1380" height="441" rx="16" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+<text x="85" y="953" font-size="27" font-weight="700" fill="#20334c">5  POWER — separate positive supplies, common ground</text>
+<text x="85" y="1003" font-size="24" font-weight="700" fill="#20334c">PC USB</text>
+<path d="M370 996 L450 996" stroke="#53647a" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<text x="475" y="1003" font-size="23" font-weight="400" fill="#20334c">C3 USB connector (power + data)</text>
+<text x="85" y="1058" font-size="24" font-weight="700" fill="#20334c">C3 3V3</text>
+<path d="M370 1051 L450 1051" stroke="#9c6819" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<text x="475" y="1058" font-size="23" font-weight="400" fill="#20334c">A4988 VDD + RESET/RST + SLEEP/SLP</text>
+<text x="85" y="1113" font-size="24" font-weight="700" fill="#20334c">Servo supply +</text>
+<path d="M370 1106 L450 1106" stroke="#c74646" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<text x="475" y="1113" font-size="23" font-weight="400" fill="#20334c">Both servo red wires: rated voltage, typically 5–6 V*</text>
+<text x="85" y="1168" font-size="24" font-weight="700" fill="#20334c">Motor supply +</text>
+<path d="M370 1161 L450 1161" stroke="#c74646" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<text x="475" y="1168" font-size="23" font-weight="400" fill="#20334c">A4988 VMOT: 12 V DC example, current limit required</text>
+<text x="85" y="1220" font-size="21" font-weight="400" fill="#20334c">A4988 EN → GND. Example: MS1 + MS2 + MS3 → 3V3 (1/16 step). Recalibrate travel.</text>
+<text x="85" y="1260" font-size="21" font-weight="400" fill="#20334c">Add ≥47 µF across VMOT (+) and GND (−), close to A4988; 100 µF / 25 V for 12 V.</text>
+<rect x="85" y="1290" width="1330" height="43" rx="7" fill="#20334c"/>
+<text x="105" y="1319" font-size="22" font-weight="700" fill="white">COMMON GND: C3 • screen • both servos • both A4988 GND pins • supply negatives</text>
+<text x="60" y="1410" font-size="22" font-weight="700" fill="#20334c">Before first motor test: NEMA_BOOT_TRAVEL_STEPS = 0; CALIBRATION_ON_BOOT = true.</text>
+<text x="60" y="1453" font-size="21" font-weight="400" fill="#20334c">*Confirm the actual servo voltage, screen VCC rating and motor current on your components.</text>
+<text x="60" y="1495" font-size="21" font-weight="400" fill="#20334c">Set A4988 current limit first. Do not connect or disconnect motor wires while powered.</text>
+<text x="60" y="1539" font-size="20" font-weight="400" fill="#53647a">GPIO numbers match firmware/glados/glados.ino • Wiring and calibration guides in docs/</text>
+</svg>
