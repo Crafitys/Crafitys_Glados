@@ -2,7 +2,7 @@
 
 ## Project files
 
-The Crafitys project sources and documentation are supplied here for the animatronic build. No blanket reuse license has been selected for these project files in this package. Public availability alone should not be read as a grant of every reuse right. The STL files and mechanical assembly manual are distributed separately through [Crafitys on Cults3D](https://cults3d.com/fr/utilisateurs/Crafitys/fichiers-3d), under the terms of the relevant listing.
+The Crafitys project sources and documentation are supplied here for the animatronic build. No blanket reuse license has been selected for these project files in this package. Public availability alone should not be read as a grant of every reuse right. The STL files are distributed through [Crafitys on Cults3D](https://cults3d.com/fr/utilisateurs/Crafitys/fichiers-3d), under the terms of the relevant listing. Crafitys supplied the assembly manual and original shopping-list PDF for inclusion here. The README logo and robot render are extracted from the supplied manual cover; they are Crafitys project artwork. This repository does not grant a separate blanket reuse license for those images or documents.
 
 ## Included voices
 

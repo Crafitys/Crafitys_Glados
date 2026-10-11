@@ -1,6 +1,8 @@
-# Electrical parts from the Crafitys build list
+# Electrical essentials
 
-These are the electrical items in the supplied shopping list. Quantities below are the number **used in one robot**, not the number of packs to buy. Mechanical items such as screws, inserts, bearings, belts, pulleys and aluminium profiles are covered by the assembly manual on [Cults3D](https://cults3d.com/fr/utilisateurs/Crafitys/fichiers-3d).
+For the full mechanical and electrical shopping list, all supplied product links, fastener sizes and added build items, see the **[complete bill of materials](BOM.md)**. The **[assembly manual](assembly/Glados_Assembly_Instructions.pdf)** is also included here.
+
+These are the electrical items in the supplied shopping list. Quantities below are the number **used in one robot**, not the number of packs to buy. Mechanical items such as screws, inserts, bearings, belts, pulleys and aluminium profiles are covered by the [complete BOM](BOM.md) and included [assembly manual](ASSEMBLY.md).
 
 | Component | Used | Role | Listed product |
 | --- | ---: | --- | --- |
