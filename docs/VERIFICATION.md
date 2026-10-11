@@ -5,7 +5,7 @@ This public package was prepared from the supplied complete Python script, the n
 ## Release preparation changes
 
 - Removed the persistent profile file, its loading/saving and confirmation functions, and hard-coded personal names.
-- Removed the voice-trigger dependency and model-loading path. Foreground terminal Enter is the activation method.
+- Added foreground terminal Enter control for starting a conversation.
 - Provided English recognition/replies/voice and a French launcher with French recognition/replies/voice.
 - Preserved streaming AI replies, sentence-by-sentence speech, USB animation sequencing and idle behavior.
 - Made Piper use the CPU by default and added Windows terminal/serial compatibility.
@@ -17,7 +17,7 @@ This public package was prepared from the supplied complete Python script, the n
 
 The Python scripts are checked for syntax and tested for language selection, temporary conversation context, target paths and streamed reply handling. Both supplied ONNX files pass ONNX structure checks and produce non-empty 22,050 Hz speech using CPU Piper.
 
-The public text files are scanned for the supplied private names, personal home paths, e-mail addresses, credentials and the removed persistence/activation code. The ONNX model metadata is also inspected; the supplied models have no custom metadata or model/graph documentation strings. No private profile or original personal test script is bundled.
+The public text files are scanned for the supplied private names, personal home paths, e-mail addresses, credentials and persistent profile code. The ONNX model metadata is also inspected; the supplied models have no custom metadata or model/graph documentation strings. No private profile or original personal test script is bundled.
 
 The firmware compiles for `esp32:esp32:esp32c3:CDCOnBoot=cdc` with Arduino-ESP32 **3.3.0**, ESP32Servo **3.2.1**, Adafruit GFX **1.12.6**, Adafruit GC9A01A **1.1.1** and Adafruit BusIO **1.17.4**. The build uses **388,584 bytes** of program storage and **20,008 bytes** of global RAM. These figures depend on the selected core and library versions.
 
