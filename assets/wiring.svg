@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="790" viewBox="0 0 1300 790" role="img" aria-labelledby="title desc">
+<title id="title">ESP32-C3 Super Mini signal wiring</title><desc id="desc">Exact GPIO destinations for the eye servo, head roll servo, head pitch STEP and DIR, GC9A01A display, active-low LED and USB PC connection.</desc>
+<style>text{font-family:Arial,sans-serif;fill:#152b3e}.heading{font-size:26px;font-weight:700}.label{font-size:20px}.small{font-size:16px}.pin{font-family:monospace;font-size:18px}.wire{fill:none;stroke-width:3;stroke-linejoin:round}.box{fill:#fff;stroke:#bed0dc;stroke-width:2}</style>
+<rect width="1300" height="790" rx="16" fill="#f1f5f8"/>
+<text x="45" y="52" class="heading">ESP32-C3 SUPER MINI — SIGNAL CONNECTIONS</text>
+<text x="45" y="80" class="small">GPIO numbers match firmware/glados/glados.ino. This is a signal map, not a physical header layout.</text>
+<rect class="box" x="390" y="125" width="320" height="560" rx="16" fill="#e7f0f6"/>
+<text x="430" y="163" class="heading">ESP32-C3</text>
+<text x="430" y="190" class="small">Super Mini / native USB</text>
+<rect class="box" x="40" y="125" width="260" height="95" rx="12"/>
+<text x="62" y="162" class="label">PC</text><text x="62" y="192" class="small">USB data / 115200 baud</text>
+<path class="wire" d="M300 175H355V225H390" stroke="#66798b"/>
+<text x="410" y="231" class="pin">USB</text>
+<g class="pin"><text x="570" y="235">GPIO 6</text><text x="570" y="300">GPIO 7</text><text x="570" y="360">GPIO 3</text><text x="570" y="393">GPIO 10</text><text x="570" y="455">GPIO 5</text><text x="570" y="486">GPIO 1</text><text x="570" y="517">GPIO 0</text><text x="570" y="548">GPIO 2</text><text x="570" y="579">GPIO 4</text><text x="570" y="643">GPIO 9</text></g>
+<rect class="box" x="900" y="195" width="350" height="75" rx="12"/>
+<text x="920" y="225" class="label">EYE SERVO — up/down</text><text x="920" y="250" class="small">Signal / servo1</text>
+<path class="wire" d="M710 229H900" stroke="#ca832c"/>
+<text x="763" y="221" class="small">signal</text>
+<rect class="box" x="900" y="280" width="350" height="75" rx="12"/>
+<text x="920" y="308" class="label">HEAD ROLL — left/right tilt</text><text x="920" y="336" class="small">Signal / servo2</text>
+<path class="wire" d="M710 294H845V318H900" stroke="#b7546e"/>
+<rect class="box" x="900" y="365" width="350" height="70" rx="12"/>
+<text x="1040" y="393" class="label">PITCH DRIVER</text><text x="1040" y="420" class="small">Head up/down</text>
+<path class="wire" d="M710 354H830V385H900" stroke="#267dac"/>
+<path class="wire" d="M710 387H802V413H900" stroke="#555dab"/>
+<text x="920" y="390" class="pin">STEP</text><text x="920" y="419" class="pin">DIR</text>
+<rect class="box" x="900" y="455" width="350" height="150" rx="12"/>
+<text x="1045" y="488" class="label">GC9A01A</text><text x="1045" y="516" class="small">Round SPI display</text>
+<path class="wire" d="M710 449H780V475H900" stroke="#278a76"/>
+<path class="wire" d="M710 480H764V501H900" stroke="#278a76"/>
+<path class="wire" d="M710 511H749V527H900" stroke="#278a76"/>
+<path class="wire" d="M710 542H734V553H900" stroke="#278a76"/>
+<path class="wire" d="M710 573H719V579H900" stroke="#278a76"/>
+<g class="pin"><text x="920" y="481">CS</text><text x="920" y="507">DC</text><text x="920" y="533">RST/RES</text><text x="920" y="559">SCL/SCK</text><text x="920" y="585">SDA/DIN</text></g>
+<rect class="box" x="900" y="625" width="350" height="60" rx="12"/>
+<text x="920" y="653" class="label">ACTIVE-LOW LED CIRCUIT</text><text x="920" y="676" class="small">Check BOOT pin loading / current limit</text>
+<path class="wire" d="M710 637H810V655H900" stroke="#cc5742"/>
+<rect class="box" x="40" y="285" width="260" height="185" rx="12"/>
+<text x="62" y="320" class="label">MOTOR POWER</text>
+<text x="62" y="350" class="small">External rated supplies</text>
+<text x="62" y="382" class="small">Servos → servo supply</text>
+<text x="62" y="410" class="small">Stepper → driver outputs</text>
+<text x="62" y="442" class="small">EN / MS / SLEEP → datasheet</text>
+<text x="45" y="718" class="label">COMMON GND: C3 + servo supply + driver signal ground + display</text>
+<text x="45" y="748" class="small">All C3 signals use 3.3 V logic. Select supply voltages from the actual component specifications.</text>
+<text x="45" y="774" class="small">GPIO 9 is also BOOT. No firmware-controlled driver EN pin. Calibrate head pitch from a known physical start pose.</text>
+</svg>

@@ -1,0 +1,14 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.env
+*.log
+*.wav
+*.mp3
+build/
+.DS_Store
+Thumbs.db
+# Large voice weights ship in the complete GitHub release asset.
+voices/*.onnx
