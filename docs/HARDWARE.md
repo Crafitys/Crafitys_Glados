@@ -17,15 +17,15 @@ The product links identify the supplied list; they do not establish the electric
 
 | Item absent from the list | Purpose |
 | --- | --- |
-| Regulated servo supply, at the servo's rated voltage | Powers both servos independently of the C3 regulator; allow for both servos' peak current |
-| Suitable DC motor supply | Powers A4988 VMOT; the wiring guide uses **12 V as an example**, with the current limit set for the actual motor |
-| Electrolytic capacitor, at least 47 µF | Connected across VMOT and motor GND close to the driver; **100 µF / 25 V** is an example for a 12 V supply |
+| Suitable external DC supply | The map uses **24 V as an example**, feeding A4988 VMOT and the converter input; allow for both loads and set the actual motor's phase-current limit |
+| DC/DC step-down converter rated for the external supply input | **Added for the map's 24 V → 5 V servo supply.** Set and measure 5.0 V before connection; confirm both servos support 5 V and size for their combined peak current |
+| Electrolytic capacitor, at least 47 µF | Connected across VMOT and motor GND close to the driver; the 24 V map shows **100 µF / 50 V** |
 | 330 Ω resistor, 1/4 W | Limits the red LED current in the shown 3.3 V circuit |
 | USB data cable | Powers the C3 and connects it to the PC |
 | Wires, headers and suitable connectors/terminal blocks | Signal wiring and motor power distribution |
 | Multimeter | Identifies motor winding pairs and measures A4988 VREF |
 | Driver heatsink/cooling as required | Keeps the A4988 within the module's thermal limits |
 
-A single higher-voltage supply with a correctly rated adjustable step-down converter can provide a separate servo rail. Set and measure that rail before connecting the servos. The simpler diagram shows two external supply outputs; their **negative terminals share GND**, while their positive outputs remain separate.
+The [component wiring map](WIRING.md) shows **USB-C from the PC powering the ESP32-C3**, with a separate **24 V supply feeding the A4988 and a converter set to 5 V for both servos**. All negative terminals and component grounds share **0 V / GND**; this does not require negative-voltage supplies. Keep external +5 V separate from USB +5 V. A suitable 12 V motor supply with a compatible converter is an alternative; use capacitor voltage ratings with adequate margin for the selected rail (100 µF / 25 V is an example for 12 V).
 
 See [the basic wiring guide](WIRING.md) for the pin-by-pin table and schematic, then [calibrate motor travel](CALIBRATION.md).

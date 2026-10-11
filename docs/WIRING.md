@@ -2,9 +2,24 @@
 
 Use the **ESP32-C3 Super Mini** with `firmware/glados/glados.ino`. Read the pin names printed on each board: **GPIO numbers are not header positions**. The [electrical parts list](HARDWARE.md) identifies the components supplied for this build.
 
-![Basic GLaDOS connection map](../assets/wiring-basic.svg)
+![GLaDOS component, power and signal wiring map](../assets/power-map.svg)
 
-This connection map groups signals and power so you can wire one component at a time. It uses an **A4988 carrier**, a **12 V motor-supply example**, and an **illustrative 1/16-step setting**. Those microsteps were not established by the supplied list or code: calibrate your build before using the supplied movement limits.
+Each rectangle represents a component, with its named pins and connecting wires. Pin positions are schematic: follow the labels on your actual boards. **Dots join wires; crossings without dots do not.** Winding colours identify coil pairs, not the actual motor cable colours.
+
+The map uses an **A4988 carrier**, an **external 24 V DC example**, a **24 V → 5 V DC/DC step-down converter** for the servos, and an **illustrative 1/16-step setting**. Confirm the motor/driver ratings and both servos' 5 V compatibility. These microsteps were not established by the supplied list or code: calibrate your build before using the supplied movement limits. A suitable 12 V motor supply can also be used, with a converter rated for that input.
+
+### Follow the power paths first
+
+| Power source | Connect to | Voltage/reference |
+| --- | --- | --- |
+| PC USB-C data cable | ESP32-C3 USB-C connector | USB +5 V and USB GND, inside the cable; the board creates 3.3 V |
+| External DC supply **+24 V** | A4988 **VMOT** and converter **IN+** | 24 V example, never directly to servos or the C3 |
+| External DC supply **−** | Converter **IN−** and common **GND** | **0 V / GND**, not a −24 V rail |
+| Converter **OUT+**, adjusted and measured at **5.0 V** | Both servo positive wires | External +5 V, independent of USB +5 V |
+| Converter **OUT−** | Both servo grounds and common **GND** | **0 V / GND**, not a −5 V rail |
+| C3 **3V3** | Screen VCC if compatible, A4988 VDD/RESET/SLEEP/MS pins, LED resistor | 3.3 V logic rail |
+
+The USB cable also carries serial data; its data conductors are not drawn individually. **Do not connect the converter's +5 V output to the USB +5 V/C3 5V rail.** USB powers the C3; the converter supplies the servos. Size the converter for both servos' peak current and the external supply for both the driver and converter loads. Set and measure converter output before connecting the servos.
 
 ## 1. Connect the two servos
 
@@ -43,7 +58,7 @@ The driver has two power inputs: **VDD** for logic and **VMOT** for motor power.
 | **DIR** | C3 **GPIO 10** | Direction |
 | **VDD** | C3 **3V3** | 3.3 V logic supply |
 | **GND**, both driver ground pins | Common **GND** | Logic and motor return |
-| **VMOT** | Motor supply **+**; 12 V DC is the example | Motor power |
+| **VMOT** | Motor supply **+**; 24 V DC is the map's example | Motor power |
 | **EN / ENABLE** | **GND** | Keeps outputs enabled; the firmware does not control EN |
 | **RESET / RST** | **3V3** | Holds reset inactive |
 | **SLEEP / SLP** | **3V3** | Keeps the driver awake |
@@ -53,7 +68,7 @@ The driver has two power inputs: **VDD** for logic and **VMOT** for motor power.
 
 RESET and SLEEP can be bridged together and connected to 3V3. Join the motor supply negative to common GND. Keep the printed module pin names authoritative: clones can differ in orientation.
 
-**Add a capacitor across VMOT and its nearby GND.** Put its **+ lead on VMOT** and its **− lead on GND**. Use at least 47 µF; the example is **100 µF / 25 V for 12 V**, close to the driver.
+**Add a capacitor across VMOT and its nearby GND.** Put its **+ lead on VMOT** and its **− lead on GND**. Use at least 47 µF; the map shows **100 µF / 50 V for the 24 V example**, close to the driver. A 100 µF / 25 V capacitor is an example for 12 V, not for this 24 V setup. The A4988 carrier reference supports an 8–35 V motor supply; verify your actual module and set the motor phase-current limit below before use. Long supply leads can cause destructive voltage spikes even below the nominal maximum.
 
 ### Identify the two motor wire pairs
 
@@ -101,15 +116,15 @@ GPIO 9 is also **BOOT**. The LED circuit must not hold it low during normal star
 | --- | --- |
 | PC USB data cable | C3 USB connector: board power and serial data |
 | C3 GND | Common ground junction |
-| Servo supply negative and both servo ground wires | Common ground junction |
+| Converter IN−/OUT− and both servo ground wires | Common ground junction |
 | Motor supply negative and both A4988 GND pins | Common ground junction |
 | Display GND | Common ground junction |
 
-**Common GND is the shared electrical reference.** Use suitable power wiring and a distribution junction for motor return currents, with a ground connection to the C3. The servo and motor supplies' positive outputs remain separate. Do not feed 12 V to the C3, display, LED or servos. Do not power either motor type from a GPIO or the C3 3V3 regulator. For this USB-powered arrangement, do not also wire an external positive supply into the C3 5V pin.
+**Common GND is the shared electrical reference.** Use suitable power wiring and a distribution junction for motor return currents, with a ground connection to the C3. Route motor power returns through the distribution wiring, not through the C3 board. The USB +5 V, external servo +5 V and motor +24 V outputs remain separate. Do not feed 24 V (or 12 V) to the C3, display, LED or servos. Do not power either motor type from a GPIO or the C3 3V3 regulator. For this USB-powered arrangement, do not also wire an external positive supply into the C3 5V pin.
 
 ## 6. First power-up
 
-1. Disconnect all supplies before wiring. Confirm polarity and winding pairs.
+1. Disconnect all supplies before wiring. Confirm polarity and winding pairs. Adjust and measure the converter at 5.0 V before attaching compatible servos.
 2. Before flashing an uncalibrated build, set `NEMA_BOOT_TRAVEL_STEPS = 0` and `CALIBRATION_ON_BOOT = true`. Flash with external motor supplies off.
 3. Test the C3/display by USB first. A servo still receives its initial angle when powered: fit horns/linkages using the [calibration procedure](CALIBRATION.md).
 4. Set the A4988 current limit, then power and test each axis in small increments from a known reference pose.
